@@ -19,7 +19,7 @@ const Navigation = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [cookies, setCookie, removeCookie] = useCookies(['_vercel_jwt']);
+  const [cookies, setCookie, removeCookie] = useCookies(['verificationToken']);
   const [user, setUser] = useState(null);
 
   // Ref for the loading bar
@@ -27,16 +27,16 @@ const Navigation = () => {
 
   // Decode the JWT token and set user data
   useEffect(() => {
-    if (cookies._vercel_jwt) {
+    if (cookies.verificationToken) {
       try {
-        const decodedToken = jwtDecode(cookies._vercel_jwt);
+        const decodedToken = jwtDecode(cookies.verificationToken);
         setUser(decodedToken.userData); // Set user data from the token
       } catch (error) {
         console.error("Error decoding token:", error);
-        removeCookie('_vercel_jwt', { path: '/' }); // Remove invalid token
+        removeCookie('verificationToken', { path: '/' }); // Remove invalid token
       }
     }
-  }, [cookies._vercel_jwt, removeCookie]);
+  }, [cookies.verificationToken, removeCookie]);
 
   const handleCloseLogin = () => setShowLogin(false);
   const handleShowLogin = () => {
@@ -118,7 +118,7 @@ const Navigation = () => {
   };
 
   const handleLogout = () => {
-    removeCookie('_vercel_jwt', { path: '/' });
+    removeCookie('verificationToken', { path: '/' });
     setUser(null);
     navigate("/");
   };
